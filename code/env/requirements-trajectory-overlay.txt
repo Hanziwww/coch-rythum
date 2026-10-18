@@ -1,0 +1,8 @@
+# Separate package overlay for the trajectory checks of the myeloid hypotheses (630_myeloid_trajectories.py),
+# which add envs/traj_pkgs to the Python path (it needs its own SciPy). Install with:
+#   pip install --target envs/traj_pkgs -r requirements-trajectory-overlay.txt
+cellrank==2.3.3
+palantir==1.4.5
+mellon==1.7.1
+pygam==0.12.0
+scipy==1.16.3

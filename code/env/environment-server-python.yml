@@ -1,0 +1,38 @@
+# Python environment of the server analyses (single-cell, statistics, integration), pinned to the versions used
+# (software_versions_server.csv). Create with: conda env create -f environment-server-python.yml
+# torch was the cu130 build (2.12.1+cu130); install the build that matches your hardware.
+name: coch-sc
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12.3
+  - pip
+  - pip:
+      - numpy==2.4.6
+      - pandas==2.3.3
+      - scipy==1.18.1
+      - statsmodels==0.15.0
+      - scikit-learn==1.9.1
+      - anndata==0.13.4
+      - scanpy==1.12.4
+      - scvi-tools==1.5.1
+      - scib-metrics==0.6.1
+      - harmonypy==2.1.0
+      - scanorama==1.7.4
+      - bbknn==1.6.0
+      - decoupler==2.2.0
+      - liana==1.10.0
+      - cell2cell==0.9.0
+      - numpyro==0.22.0
+      - jax==0.11.2
+      - torch==2.12.1
+      - lightning==2.6.6
+      - pyarrow==26.0.0
+      - joblib==1.6.0
+      - numba==0.68.0
+      - pynndescent==0.6.0
+      - leidenalg==0.12.0
+      - igraph==1.0.0
+      - pyyaml==6.0.3
+      - matplotlib==3.11.0
+      - tensorly==0.10.0

@@ -1,0 +1,87 @@
+# Curated mouse gene sets (symbols) for Modules 3, 5 and 6. X-linked genes are absent from the atlas matrix and
+# are listed only where they are canonical members (they are dropped automatically at scoring time).
+clock:
+  core_positive_arm: [Npas2, Clock, Arntl, Rorc, Rora, Nfil3, Cry1]
+  core_negative_arm: [Per1, Per2, Per3, Cry2, Nr1d1, Nr1d2, Dbp, Tef, Hlf, Bhlhe40, Bhlhe41, Ciart]
+  ebox_outputs: [Dbp, Nr1d1, Nr1d2, Per1, Per2, Per3, Cry2, Tef, Hlf, Ciart, Bhlhe40, Bhlhe41, Wee1, Tsc22d3]
+  rre_outputs: [Npas2, Arntl, Clock, Nfil3, Cry1, Rorc]
+  dbox_outputs: [Per3, Nr1d1, Nr1d2, Per1, Bhlhe40, Tef]
+systemic_cues:
+  glucocorticoid_response: [Fkbp5, Per1, Zbtb16, Sgk1, Dusp1, Klf9, Klf15, Mt1, Mt2, Cdkn1a, Errfi1, Pdk4, Sesn1,
+                            Ddit4, Txnip, Nfkbia, Gadd45b, Tiparp, Cebpd, Sult1a1, Lcn2, Il1r2, Cxcr4, Il7r]
+  adrenergic_camp: [Nr4a1, Nr4a2, Nr4a3, Fosb, Crem, Pde4b, Pde4d, Sik1, Ppargc1a, Rgs2, Dusp1, Areg, Adrb2, Adrb3]
+  temperature_cold_inducible: [Cirbp, Rbm3]
+  heat_shock_hsf1: [Hspa1a, Hspa1b, Hsph1, Hspa8, Dnajb1, Hsp90aa1, Hspb1, Hspa5, Hspd1, Hspe1]
+  hypoxia: [Vegfa, Slc2a1, Pgk1, Ldha, Bnip3, Egln3, Adm, Ndrg1, P4ha1, Ankrd37, Higd1a, Ero1a]
+  feeding_insulin_mtor: [Srebf1, Insig1, Ldlr, Hmgcr, Pdk4, Txnip, Ppargc1a, Slc2a4, Irs2, Ddit4, Sesn1]
+migration:
+  chemokines: [Cxcl1, Cxcl2, Cxcl3, Cxcl5, Cxcl9, Cxcl10, Cxcl12, Cxcl13, Cxcl14, Cxcl16, Ccl2, Ccl3, Ccl4, Ccl5, Ccl6,
+               Ccl7, Ccl8, Ccl9, Ccl12, Ccl17, Ccl19, Ccl20, Ccl21a, Ccl22, Ccl24, Ccl25, Ccl28, Cx3cl1, Xcl1]
+  chemokine_receptors: [Cxcr1, Cxcr2, Cxcr3, Cxcr4, Cxcr5, Cxcr6, Ccr1, Ccr2, Ccr3, Ccr5, Ccr6, Ccr7, Ccr8, Ccr9, Ccr10,
+                        Cx3cr1, Xcr1, Ackr1, Ackr2, Ackr3, Ackr4]
+  integrins_adhesion: [Itga4, Itgb1, Itgb2, Itgal, Itgam, Itgax, Itgb7, Itgae, Icam1, Icam2, Vcam1, Madcam1, Pecam1,
+                       Cd99, F11r, Jam2, Jam3, Cd44, Alcam]
+  selectins: [Sele, Selp, Sell, Selplg, Glycam1, Fut4, Fut7]
+  s1p_axis: [Sphk1, Sphk2, Spns2, Mfsd2b, S1pr1, S1pr2, S1pr3, S1pr4, S1pr5, Klf2, Cd69, Sgpl1]
+  oxysterol_gpr183: [Ch25h, Cyp7b1, Hsd3b7, Gpr183]
+  ltb4_formyl: [Alox5, Alox5ap, Lta4h, Ltb4r1, Fpr1, Fpr2, C3, C5, C3ar1, C5ar1, C5ar2]
+  bm_retention_egress: [Cxcl12, Kitl, Vcam1, Cxcr4, Cxcr2, Cxcl1, Cxcl2, Cxcl5, Csf3r, Csf3, Itga4, Itgb1, Adrb3, Adrb2,
+                        Cd44, Sell, Ccr2, Ccl2, Ccl7, S1pr1, Spns2]
+neutrophil:
+  immature_granule: [Ltf, Camp, Ngp, Lcn2, Chil3, Cd177, Ltf, Mmp8, Mpo, Elane, Prtn3, Ctsg, Ms4a3]
+  mature_terminal: [Ccl6, Mmp9, Retnlg, Il1b, Fpr1, Fpr2, Csf3r, Cxcr2, Sell, Slpi, Wfdc21, Lrg1, Ifitm6]
+  aging_cxcr4hi_sell_lo: [Cxcr4, Il1b, Icam1, Ccl3, Ccl4, Cd14, Tnf, Nfkbia, Ier3, Junb, Egr1, Csf1, Hes1, Socs3]
+  activation_inflammatory: [Il1b, Tnf, Ccl3, Ccl4, Cxcl2, Ptgs2, Nfkbia, Icam1, Csf1, Isg15, Ifit1, Ifit3, Rsad2]
+macrophage:
+  tlf_resident: [Timd4, Lyve1, Folr2, Mrc1, Cd163, F13a1, Gas6, Cbr2]
+  ccr2_monocyte_derived: [Ccr2, Ly6c2, Plac8, Chil3, Ms4a4c, Hp, Ifitm6]
+  mhcii_hi: [H2-Aa, H2-Ab1, H2-Eb1, Cd74, Ciita, Cd209a, Cd83]
+  efferocytosis: [Mertk, Axl, Gas6, Pros1, Timd4, Cd36, Itgav, Itgb5, Mfge8, C1qa, C1qb, C1qc]
+niche:
+  bm_niche_factors: [Cxcl12, Kitl, Angpt1, Il7, Csf1, Vcam1, Jag1, Spp1, Lepr, Ebf3, Adipoq, Tgfb1, Bglap, Sp7, Runx2]
+  hspc_niche_receptors: [Cxcr4, Kit, Tek, Il7r, Csf1r, Notch1, Notch2, Itga4, Itgb1, Cd44, Mpl]
+immune_readiness:
+  pattern_recognition: [Tlr1, Tlr2, Tlr3, Tlr4, Tlr5, Tlr6, Tlr9, Nod1, Nod2, Cd14, Myd88, Ticam1, Clec7a, Clec4e]
+  inflammasome: [Nlrp3, Nlrp1a, Nlrc4, Aim2, Pycard, Casp1, Casp4, Il1b, Il18, Gsdmd]
+  cytokines: [Il1a, Il1b, Il6, Tnf, Il10, Il12b, Il18, Il23a, Ifng, Il4, Il13, Il17a, Csf1, Csf2, Csf3, Tgfb1, Osm, Lif]
+  antigen_presentation_mhcii: [H2-Aa, H2-Ab1, H2-Eb1, H2-DMa, H2-DMb1, Cd74, Ciita, Ctss, Cd80, Cd86, Cd40]
+  interferon_response: [Isg15, Ifit1, Ifit2, Ifit3, Rsad2, Oas1a, Oasl1, Mx1, Mx2, Irf7, Stat1, Bst2, Ifi27l2a, Usp18]
+  nfkb_targets: [Nfkbia, Nfkbiz, Tnfaip3, Relb, Nfkb1, Nfkb2, Icam1, Cxcl1, Cxcl2, Ccl3, Ccl4, Tnf, Il1b, Ier3, Birc3]
+  phagocytosis_lysosome: [Cd68, Lamp1, Lamp2, Ctsb, Ctsd, Ctsl, Fcgr1, Fcgr2b, Fcgr3, Msr1, Marco, Cd36, Lyz2]
+hearing:
+  potassium_recycling: [Kcnq1, Kcne1, Kcnj10, Kcnj16, Kcnq4, Slc12a2, Atp1a1, Atp1a2, Atp1b1, Atp1b2, Gjb2, Gjb6, Cldn11]
+  hair_cell_function: [Slc26a5, Otof, Myo7a, Myo6, Myo15a, Tmc1, Cdh23, Pcdh15, Strc, Ocm, Calb2, Pou4f3, Atoh1,
+                       Cib2, Lhfpl5, Tmie, Kcnq4]
+  synaptic_ribbon: [Ctbp2, Otof, Cacna1d, Bsn, Rims2, Slc17a8, Vglut3, Gria2, Gria3, Gria4]
+  sgn_function: [Ntrk2, Ntrk3, Bdnf, Ntf3, Calb1, Calb2, Pou4f1, Lypd1, Runx1, Scn1a, Kcnc1]
+  blood_labyrinth_barrier: [Cldn5, Ocln, Tjp1, Cdh5, Pecam1, Plvap, Slc2a1, Abcb1a, Abcb1b, Mfsd2a, Lsr, Angpt2, Pdgfrb]
+  ototoxic_uptake_protection: [Lrp2, Slc31a1, Slc22a2, Atp7a, Atp7b, Mt1, Mt2, Nfe2l2, Hmox1, Gsta4, Gstm1, Sod1, Sod2,
+                               Trpv1, Trpv4, Trpa1, Tmc1]
+  deafness_genes_core: [Gjb2, Gjb6, Slc26a4, Slc26a5, Otof, Myo7a, Myo6, Myo15a, Tmc1, Cdh23, Pcdh15, Ush1c, Ush2a,
+                        Tecta, Coch, Strc, Kcnq4, Kcnq1, Kcne1, Pou4f3, Eya4, Wfs1, Diaph1, Actg1, Tmprss3, Lhfpl5,
+                        Tmie, Cib2, Grxcr1, Lrtomt, Espn, Triobp, Myh9, Myh14, Clrn1, Otoa, Otog, Otogl, Col11a2,
+                        Ptprq, Cldn14, Ildr1, Loxhd1, Gipc3, Elmod3, Mpzl2, Cabp2, Slc17a8, Grhl2, Ceacam16]
+  glucocorticoid_mineralocorticoid: [Nr3c1, Nr3c2, Hsd11b1, Hsd11b2, Fkbp5, Sgk1]
+# round 6: myeloid function / readiness programmes (M4; literature)
+myeloid_function:
+  granules_primary: [Mpo, Elane, Prtn3, Ctsg, Azu1, Ms4a3]
+  granules_secondary: [Ltf, Camp, Ngp, Lcn2, Chil3, Cd177]
+  granules_tertiary: [Mmp9, Mmp8, Mmp25, Arg1, Itgb2l]
+  net_formation: [Padi4, Mpo, Elane, Ctsg, Prtn3, Gsdmd]
+  ros_nox2: [Cybb, Cyba, Ncf1, Ncf2, Ncf4, Rac2]
+  chemotaxis_receptors: [Cxcr2, Cxcr1, Fpr1, Fpr2, C5ar1, C3ar1, Ccr1, Ltb4r1, Ptafr]
+  il1_nlrp3: [Nlrp3, Il1b, Pycard, Casp1, Gsdmd, Il18, Il1rn, Il1r2]
+  phagocytosis_lysosome: [Cd68, Lamp1, Lamp2, Ctsb, Ctsd, Ctsl, Fcgr1, Fcgr2b, Fcgr3, Msr1, Cd36, Lyz2]
+  interferon_type1: [Isg15, Ifit1, Ifit2, Ifit3, Rsad2, Oas1a, Oasl1, Mx1, Mx2, Irf7, Stat1, Bst2, Usp18]
+# round 5: B-cell function programmes (literature; immediate-early genes kept out except where flagged)
+b_cell:
+  vdj_prebcr: [Rag1, Rag2, Dntt, Vpreb1, Vpreb2, Vpreb3, Igll1, Cd79a, Cd79b]
+  il7r_stat5: [Il7r, Stat5a, Stat5b, Cish, Socs2, Pim1, Ccnd3, Bcl2]
+  bcr_cd19_signalling: [Cd19, Cd79a, Cd79b, Syk, Blnk, Btk, Plcg2, Lyn, Cd22, Cd72, Ptpn6, Cr2, Ms4a1]
+  baffr_survival: [Tnfrsf13c, Tnfrsf13b, Tnfrsf17, Bcl2, Mcl1, Nfkb2, Relb, Traf3]
+  mhcII_costimulation: [H2-Aa, H2-Ab1, H2-Eb1, H2-DMa, H2-DMb2, H2-Ob, Cd74, Ciita, Cd86, Cd80, Cd40]
+  egress: [S1pr1, Sell, Ccr7, Klf2]
+  retention_homing: [Cxcr4, Cxcr5, Itga4, Itgb1, Itgal, Cd69]
+  proliferation: [Mki67, Top2a, Ccnb1, Cdk1, Mcm2, Mcm3, Mcm5, Mcm6, Pcna, Tyms, Birc5]
+  plasma_differentiation: [Prdm1, Xbp1, Irf4, Jchain, Sdc1, Mzb1]
+  adrenergic_receptors: [Adrb2, Adrb1, Adra2a]

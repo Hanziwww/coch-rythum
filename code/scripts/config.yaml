@@ -1,0 +1,61 @@
+# Shared configuration of all analysis scripts. Paths are relative to the project root (the release folder);
+# the environment variable COCH_ROOT overrides paths.root.
+paths:
+  root: .
+  h5ad: data/processed/coca_circadian.h5ad
+  results: results
+  cache: cache
+  external: external
+  logs: logs
+  # LaTeX sources of the manuscript
+  manuscript: manuscript
+
+journal:                   # limits checked by 907 (live guide checked 2026-10-16; ED and legend limits assumed)
+  name: Nature Immunology
+  article_type: Resource
+  abstract_min_words: 100
+  abstract_max_words: 150
+  main_text_words: 4000
+  legend_words: 250
+  main_items: 8
+  ed_items: 10
+
+journal_science:           # D145: Science Research Article limits as assumed (instructions behind a bot check, D145;
+  name: Science            #  recheck when reachable); checked by 977 for manuscript/science
+  article_type: Research Article
+  manuscript: manuscript/science
+  title_max_chars: 96
+  abstract_max_words: 125
+  total_words: 4500        # main text + references and notes + figure captions
+  figures_max: 6
+  refs_main: 40            # about 40 references (report)
+
+envs:
+  python: python
+  rscript: Rscript
+
+design:
+  period_h: 24
+  # obs["day_time"] is the wall-clock sampling hour; lights on at 08:00 (LD 12:12), so ZT = (day_time - 8) mod 24
+  # (confirmed by the user 2026-10-12 after the clock positive control showed a +8-10 h shift).
+  lights_on_clock_h: 8
+  zt_values: [3, 7, 11, 15, 19, 23]
+  tissue_codes:            # short code -> obs["tissue"] value
+    cochlea: cochlea
+    bm: bone marrow
+  label_cols: [cell_type, cell_class, cell_type_abbr]
+
+pseudobulk:
+  min_cells_primary: 20    # cells per sample (all 6 samples) for primary rhythm analyses
+  min_cells_flag: 10       # 10-19 cells in some sample -> analysed but flagged
+
+rhythm:
+  fc_threshold: 1.5        # peak-to-trough fold change
+  q_tier1: 0.05
+  q_tier2: 0.10
+  perm_fdr_tier1: 0.10
+  loto_phase_sd_h: 3.0
+  n_boot: 2000
+
+seeds: [0, 1, 2]
+threads: 64

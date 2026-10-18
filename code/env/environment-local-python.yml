@@ -1,0 +1,28 @@
+# Python environment of the imaging, flow-cytometry, figure, table and manuscript scripts (9xx scripts that
+# state a local run), run on a workstation; versions from software_versions_local.csv. Create with:
+#   conda env create -f environment-local-python.yml
+# torch was the cu128 build (2.9.1+cu128); install the build that matches your hardware.
+name: coch-local
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10.14
+  - pip
+  - pip:
+      - numpy==2.2.6
+      - pandas==2.2.3
+      - scipy==1.15.3
+      - statsmodels==0.14.6
+      - matplotlib==3.10.0
+      - scikit-image==0.25.2
+      - tifffile==2025.5.10
+      - Pillow==12.1.1
+      - PyMuPDF==1.28.2
+      - PyYAML==6.0.3
+      - openpyxl==3.1.5
+      - h5py==3.16.0
+      - czifile==2019.7.2.2
+      - imagecodecs==2025.3.30
+      - scikit-learn==1.7.2
+      - torch==2.9.1
+      - py7zr==1.1.0

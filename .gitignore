@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+*.pem
+*.key
+.venv/
+build/
+data/processed/
+data/flow/
+data/imaging/
+external/
+results/
+figures/
+manuscript/

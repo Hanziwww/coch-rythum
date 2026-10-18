@@ -1,0 +1,42 @@
+# R environment of the rhythm statistics, compositional models, communication and deconvolution analyses,
+# pinned to the versions used (software_versions_server.csv). Create with:
+#   conda env create -f environment-server-r.yml
+# then install the GitHub packages listed in r_packages.csv (remotes::install_github). If a pinned version is not
+# available from conda, install that version from CRAN or Bioconductor.
+name: coch-rcirc
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base=4.5.3
+  - r-remotes
+  - r-yaml
+  - cmdstan
+  - bioconductor-limma=3.66.0
+  - bioconductor-edger=4.8.2
+  - bioconductor-variancepartition=1.40.2
+  - r-mashr=0.2.79
+  - r-limorhyde2=0.1.1
+  - r-metacycle=1.2.1
+  - bioconductor-rain=1.44.0
+  - r-circacompare=0.2.0
+  - bioconductor-sccomp=2.2.0
+  - r-cmdstanr=0.9.0
+  - bioconductor-speckle=1.10.0
+  - r-glmmtmb=1.1.14
+  - r-tmb=1.9.23
+  - bioconductor-milor=2.6.0
+  - bioconductor-singlecellexperiment=1.32.0
+  - r-data.table=1.18.6.1
+  - r-arrow=25.0.0
+  - bioconductor-biocparallel=1.44.0
+  - r-matrixstats=1.5.0
+  - bioconductor-dropletutils=1.30.0
+  - bioconductor-scuttle=1.20.0
+  - bioconductor-biocneighbors=2.4.0
+  - bioconductor-rcistarget=1.29.0
+  - r-deltaccd=1.0.2
+  - r-seuratobject=5.4.0
+  - r-matrix=1.7.5
+  - r-nloptr=2.2.1
+  - r-dplyr=1.2.1
