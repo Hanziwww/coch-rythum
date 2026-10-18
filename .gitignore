@@ -9,7 +9,7 @@ build/
 data/processed/
 data/flow/
 data/imaging/
-external/
+/external/
 results/
 figures/
 manuscript/
