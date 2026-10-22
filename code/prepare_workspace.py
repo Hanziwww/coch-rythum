@@ -3,7 +3,7 @@
 The scripts run from the project root (this release folder) and expect scripts/ there: R scripts source
 scripts/lib/cosinor.R and the shell chains call scripts/... The imaging scripts (93x) read folders below data/photos/
 and the flow scripts data/flow_cochlea/. This helper
-  1. links scripts/ to code/scripts (symbolic link; a directory junction or a copy on Windows),
+  1. copies code/scripts to scripts/ (figure scripts resolve their root from this directory),
   2. with --flow: copies the flow export to data/flow_cochlea/ and data/Cochlear_Flow_Plotting_Only.zip,
   3. with --images: extracts the image archives to the folders the imaging scripts read (about 60 GB),
   4. copies the Fig. 1a illustration to data/photos/fig1a_workflow/ (read by 910).
@@ -33,13 +33,9 @@ def link_scripts():
     if dst.exists():
         print("scripts/ exists")
         return
-    try:
-        dst.symlink_to(Path("code") / "scripts", target_is_directory=True)
-    except OSError:
-        if not (os.name == "nt" and subprocess.run(["cmd", "/c", "mklink", "/J", str(dst), str(src)],
-                                                   capture_output=True).returncode == 0):
-            shutil.copytree(src, dst)
-    print("scripts/ ->", src)
+    shutil.copytree(src, dst, ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
+    print("scripts/ populated from", src)
+
 
 
 def extract(archive, inner, target):

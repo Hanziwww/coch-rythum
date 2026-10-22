@@ -859,7 +859,43 @@ def build_f4():
           [pn + "parabiont_marrow_merge.png", pn + "parabiont_cochlea_merge.png", img, "f4_parabiont_objects.csv",
            "figures/panels/pb_s2b_3.png", "figures/panels/pb_s2b_4.png", "sfig_parabiosis_images.csv",
            "sfig_parabiosis_crop_objects.csv"], "M", "", "custom (914)")
+    # 4g, 4i (D150-D153) — the ear against brain, liver and blood: every tissue counted in the brain image's format
+    # (966; "I would like the number of cochleae to be comparable to the number of brains") by the strict rule of 968
+    # ("the current quantitative criteria for the cochlea are too broad"; chosen on the blinded labels, applied to every
+    # tissue): sections at 2.773 um per pixel, the brain from its projection; bars, mean of the pairs (D153: "Create a
+    # combined bar and line chart"); published blood chimerism as the band of 4i
+    # D155: detection on the local background (969; fixed before its run and chosen by the use rule recorded before it:
+    # the better label agreement), with the strict call of 968 (contrast >= 6)
+    lb = fd.read("r10_parabiosis/localbg_densities.csv")
+    lb = lb[lb["main"] & lb["animal"].isin(pr["animal"]) & lb["compartment"].isin(["liver", "marrow", "cochlea", "brain"])]
+    tg = lb.rename(columns={"cells": "cells_upgraded", "cells_strict": "cells_strict",
+                            "cell_density_per_mm2": "density_upgraded_per_mm2",
+                            "strict_density_per_mm2": "density_strict_per_mm2"})
+    tg = tg.assign(conversion=np.where(tg["compartment"] == "brain", "projection", "section"))[
+        ["animal", "days", "compartment", "conversion", "um_per_px", "fields", "tissue_mm2", "bodies", "cells_upgraded",
+         "cells_strict", "density_upgraded_per_mm2", "density_strict_per_mm2"]].reset_index(drop=True)
+    piv = tg.pivot_table(index="animal", columns="compartment", values="density_strict_per_mm2")
+    tg["cochlea_to_marrow"] = tg["animal"].map(piv["cochlea"] / piv["marrow"])
+    bar = tg.groupby("compartment")["density_strict_per_mm2"].agg(["mean", "size"])
+    tg["tissue_mean_per_mm2"] = tg["compartment"].map(bar["mean"])
+    tg["tissue_pairs"] = tg["compartment"].map(bar["size"])
+    assert len(tg) == 8 and set(tg.loc[tg["animal"] == "31 d", "compartment"]) == {"liver", "marrow", "cochlea", "brain"}
+    assert (piv["cochlea"] < piv["marrow"]).all() and (tg["density_strict_per_mm2"] > 0).all()
+    f4dt = out(fd.prov(tg, "r10_parabiosis/localbg_densities.csv", "", "brain-image format, 2.773 um per pixel, local-"
+                       "background detection (969), strict call (contrast >= 6, 968): sections for liver, marrow and "
+                       "cochlea, projection for the brain; tissue mean over pairs"),
+               "f4g_tissue_densities.csv", "Fig. 4g: partner-derived (GFP+) cells per mm2 of liver, marrow, cochlea and "
+               "brain of the wild-type partners, every tissue counted in the brain image's format with local-background "
+               "detection and the strict call (966, 968, 969), per pair and as the mean of the pairs",
+               ["animal", "compartment", "density_strict_per_mm2", "tissue_mean_per_mm2", "cochlea_to_marrow"])
+    bl = fd.read("r10_parabiosis/tissue_comparison_blood_external.csv")
+    assert len(bl) == 2 and bl["partner_derived_pct"].between(20, 31).all()
+    f4db = out(fd.prov(bl, "r10_parabiosis/tissue_comparison_blood_external.csv", "", "published values"),
+               "f4i_blood_reference.csv", "Fig. 4i: partner-derived share of blood neutrophils (and Ly6C-high monocytes) "
+               "of wild-type parabionts in published parabiosis (external, public; shaded band)",
+               ["source", "doi", "pairing_days", "partner_derived_pct"])
     vv = pr.set_index("animal")
+    tgm = tg[tg["animal"] == "31 d"].set_index("compartment")["density_strict_per_mm2"]
     panel("4", "g", f"Partner-derived cells per mm2 (upgraded body rule, 960) sparser in the cochlea than in the adjacent "
           f"marrow in all {len(pr)} pairs (ratio {pr['cochlea_to_marrow'].min():.2f}-{pr['cochlea_to_marrow'].max():.2f}; "
           f"detection-corrected {pr['corrected_cochlea_to_marrow'].min():.2f}-"
@@ -867,8 +903,11 @@ def build_f4():
           f"{pr['best_plane_cochlea_to_marrow'].min():.2f}-{pr['best_plane_cochlea_to_marrow'].max():.2f}); "
           "label-corrected ratio " + "; ".join(f"{a} {vv.loc[a, 'verified_ratio']:.2f} ({vv.loc[a, 'ci_lo']:.2f}-"
                                               f"{vv.loc[a, 'ci_hi']:.2f})" for a in pr.animal)
-          + " (D140: fewer in the cochlea at 14 and 54 days; the 31-day pair inconclusive)", [f4dp], "M", "",
-          "custom (914)")
+          + " (D140: fewer in the cochlea at 14 and 54 days; the 31-day pair inconclusive); plotted in the brain "
+          "image's format, local-background detection, strict call (D152, D153, D155): 31-day partner liver "
+          + f"{tgm['liver']:.0f}, marrow "
+          f"{tgm['marrow']:.0f}, cochlea {tgm['cochlea']:.0f} and brain {tgm['brain']:.1f} per mm2",
+          [f4dp, f4dt], "M", "", "custom (914)")
     panel("4", "h", f"Perilymph GFP+ {pool.xs('WT', level='partner').min():.0f}-"
           f"{pool.xs('WT', level='partner').max():.0f}% in wild-type vs {pool.xs('GFP', level='partner').min():.0f}-"
           f"{pool.xs('GFP', level='partner').max():.0f}% in GFP partners (14 and 28 days)", [f4dl], "M", "",
@@ -876,7 +915,8 @@ def build_f4():
     nb = fc.set_index("row")
     panel("4", "i", "Partner-derived share by cell type, 54 days (nucleus-anchored typing): " + "; ".join(
         f"{r} {int(nb.loc[r, 'gfp_pos_cells'])}/{int(nb.loc[r, 'typed_cells'])} (verified {nb.loc[r, 'verified']})"
-        for r in nb.index), [f4df], "M", "", "custom (914)")
+        for r in nb.index) + f"; band: blood neutrophils in published parabiosis {bl['partner_derived_pct'].min():.0f}-"
+        f"{bl['partner_derived_pct'].max():.0f}% (D150)", [f4df, f4db], "M", "", "custom (914)")
 
 
 def build_f5():
@@ -2428,10 +2468,76 @@ def build_simg():
           "threshold", ["srob_c_fluids.csv"], "A", "", "custom (948)")
 
 
+def build_stc():
+    """Supplementary Fig. 5 (D152) — the brain and the brain-image format: the brain projection of the 31-day partner
+    with its GFP+ bodies (964), six random counted brain cells, the 31-day cochlea, marrow and liver sections converted to
+    the brain's format with their bodies (966 tiles), native against brain-format densities per animal and tissue, and
+    the densities of the 31-day partner across conversions and assumed pixel sizes (966)."""
+    lg = fd.read("r10_parabiosis/localbg_display_tiles.csv")                 # D155: the local-background detector
+    ob = fd.read("r10_parabiosis/localbg_display_objects.csv")
+    a = out(fd.prov(lg, "r10_parabiosis/localbg_display_tiles.csv", "", "select"), "stc_display_tiles.csv",
+            "Supplementary Fig. 5a-c: display tiles in the brain image's format (field, section, pixel size, display "
+            "ranges, crop windows)", ["tile", "compartment", "um_per_px"])
+    b = out(fd.prov(ob, "r10_parabiosis/localbg_display_objects.csv", "", "select"), "stc_display_objects.csv",
+            "Supplementary Fig. 5a-c: GFP+ bodies in each display tile with their call (tile pixels)",
+            ["tile", "y", "x", "cell"])
+    st = fd.read("r10_parabiosis/strict_densities.csv")
+    nat = st[st["format"] == "native"].set_index(["animal", "compartment"])
+    lbd = fd.read("r10_parabiosis/localbg_densities.csv")
+    bfm = lbd[lbd["main"] & (lbd["compartment"] != "brain")].set_index(["animal", "compartment"])
+    nv = bfm[["days", "fields", "tissue_mm2", "cells_strict", "strict_density_per_mm2"]].rename(
+        columns={"tissue_mm2": "brain_format_tissue_mm2", "cells_strict": "brain_format_cells",
+                 "strict_density_per_mm2": "brain_format_density_per_mm2"})
+    nv = nv.join(nat[["cells_strict", "density_strict_per_mm2", "density_upgraded_per_mm2"]].rename(
+        columns={"cells_strict": "native_cells", "density_strict_per_mm2": "native_density_per_mm2",
+                 "density_upgraded_per_mm2": "native_upgraded_density_per_mm2"})).reset_index()
+    assert len(nv) == 10 and nv["native_density_per_mm2"].notna().all()
+    c = out(fd.prov(nv, "r10_parabiosis/strict_densities.csv; r10_parabiosis/localbg_densities.csv", "", "strict calls: "
+                    "native (20 robust SD, 968) vs brain-image format (local-background detection, contrast >= 6, 969)"),
+            "stc_native_vs_brain_format.csv", "Supplementary Fig. 5d: partner-derived cells per mm2 per wild-type animal "
+            "and tissue by the strict calls, native against the brain-image format",
+            ["animal", "compartment", "native_density_per_mm2", "brain_format_density_per_mm2"])
+    sv = lbd[lbd["animal"] == "31 d"][["animal", "compartment", "um_per_px", "fields", "tissue_mm2", "bodies", "cells",
+                                       "cells_strict", "cell_density_per_mm2", "strict_density_per_mm2",
+                                       "main"]].reset_index(drop=True)
+    sv["conversion"] = np.where(sv["compartment"] == "brain", "projection", "section")
+    d = out(fd.prov(sv, "r10_parabiosis/localbg_densities.csv", "", "31-day wild-type partner, brain-image format, "
+                    "local-background detection"),
+            "stc_sensitivity.csv", "Supplementary Fig. 5e: partner-derived cells per mm2 of the 31-day partner's tissues "
+            "in the brain-image format (local-background detection) by call and assumed pixel size",
+            ["compartment", "um_per_px", "cell_density_per_mm2", "strict_density_per_mm2"])
+    ch = fd.read("r10_parabiosis/localbg_agreement.csv")
+    ch["f1"] = 2 * ch["tp"] / (2 * ch["tp"] + ch["fp"] + ch["fn"])
+    e = out(fd.prov(ch, "r10_parabiosis/localbg_agreement.csv", "", "F1 added"), "stc_rule_calibration.csv",
+            "Supplementary Fig. 5f: agreement of the survey and the local-background detector, each with the upgraded "
+            "and the strict call, with the blinded labels (precision, sensitivity, F1; overall and by compartment)",
+            ["call", "scope", "precision", "sensitivity", "f1"])
+    br = sv[(sv["compartment"] == "brain")]
+    n_cells = int(ob[(ob["tile"] == "mf_brain_31d.png") & ob["strict"].astype(bool)].shape[0])      # D155
+    panel("STC", "a", f"Brain of the 31-day wild-type partner (rendered projection; GFP, lectin) with its {n_cells} "
+          "partner-derived cells (local-background detection, strict call; 2.773 um per pixel, no nucleus "
+          "criterion)",
+          ["figures/panels/mf_brain_31d.png", a, b], "M", "", "custom (967)")
+    panel("STC", "b", "Six counted brain cells drawn at random (seed 966), 120-um crops",
+          ["figures/panels/mf_brain_31d_lb_crop*.png", a, b], "M", "", "custom (967)")
+    panel("STC", "c", "31-day cochlea, marrow and liver sections of Supplementary Fig. 2a in the brain image's format, "
+          "with their counted cells", ["figures/panels/mf_cochlea_31d.png", "figures/panels/mf_marrow_31d.png",
+                                       "figures/panels/mf_liver_31d.png", a, b], "M", "", "custom (967)")
+    panel("STC", "d", "Strict rule, native vs brain-format density per animal and tissue: cochlea "
+          + "; ".join(f"{r.animal} {r.native_density_per_mm2:.0f} vs {r.brain_format_density_per_mm2:.0f}"
+                      for r in nv[nv["compartment"] == "cochlea"].itertuples()), [c], "A", "", "custom (967)")
+    panel("STC", "e", "31-day partner across assumed pixel sizes (local-background detection, strict call): brain "
+          f"{br['strict_density_per_mm2'].min():.1f}-{br['strict_density_per_mm2'].max():.1f} per mm2", [d], "A", "",
+          "custom (967)")
+    sc = ch[(ch["scope"] == "all labels")].set_index("call")
+    panel("STC", "f", "Agreement with the blinded labels (F1): " + "; ".join(
+        f"{k_} {v:.2f}" for k_, v in sc["f1"].items()), [e], "A", "", "custom (967)")
+
+
 BUILDERS = {"palette": build_palette, "f2": build_f2, "f1": build_f1, "f3": build_f3, "f4": build_f4,
             "f5": build_f5, "f6": build_f6, "f7": build_f7, "ed1": build_ed1, "ed2": build_ed2, "ed3": build_ed3, "ed4": build_ed4,
             "ed5": build_ed5, "ed6": build_ed6, "ed7": build_ed7, "ed8": build_ed8, "ed9": build_ed9, "ed10": build_ed10,
-            "s1": build_s1, "s2": build_s2, "s3": build_s3, "s4": build_s4, "s5": build_s5, "srob": build_srob, "simg": build_simg}
+            "s1": build_s1, "s2": build_s2, "s3": build_s3, "s4": build_s4, "s5": build_s5, "srob": build_srob, "simg": build_simg, "stc": build_stc}
 
 if __name__ == "__main__":
     # --index-only: run the builders for their panel rows without writing any figure table (D79); with no builder named,

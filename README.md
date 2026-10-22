@@ -2,7 +2,7 @@
 
 Code accompanying the unpublished manuscript *A day-night atlas of the inner ear and its marrow reveals an imported immune timetable* and its Science submission version.
 
-The repository is private during manuscript preparation. The corresponding authors can arrange access for editors and reviewers. The accompanying data and analysis archive is being uploaded to a restricted-access Zenodo draft, with reserved DOI **10.5281/zenodo.23451539**. This DOI is not yet a published record.
+The analysis code is public under the Apache License 2.0. The accompanying data and analysis archive is deposited at Zenodo as restricted-access version 1.1, DOI **10.5281/zenodo.23555378**. Data access requires approval from the corresponding authors. This code archive includes the tissue-comparison update of 22 October 2026.
 
 ## Contents
 

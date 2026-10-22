@@ -13,7 +13,7 @@ Outputs (manuscript/science/, generated - edit the NI source or the rules here, 
   sm_captions.tex    one page per Supplementary figure (figure + caption), in the order of sm_numbers.tex
   sm_data.tex        captions of Data S1 to S20 (NI Supplementary Tables 1-20)
   sm_conversion_log.csv (results/r10_science via lib.io.write_csv): every reference rewritten (source -> target)
-Run: COCH_ROOT=/path/to/coch-rythum python scripts/976_science_convert.py   (then 977 builds and checks)
+Run: COCH_ROOT=D:/coch-rythum python scripts/976_science_convert.py   (then 977 builds and checks)
 """
 import re
 import sys
@@ -25,14 +25,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from lib.figstyle import _US_WORDS  # noqa: E402
 from lib.io import ROOT, write_csv  # noqa: E402
 
-NI = ROOT / "manuscript" / "ni"
+NI = ROOT / "manuscript"
 SCI = ROOT / "manuscript" / "science"
 LOG = []
 
 # ---------------------------------------------------------------------------------------------- figure maps
 ED_KEY = {1: "qc", 2: "markers", 3: "external", 4: "calibration", 5: "clocksED", 6: "programmesED", 7: "heatED",
           8: "blineage", 9: "myeloid", 10: "macohort"}
-SI_KEY = {1: "route", 2: "pbtissues", 3: "pbperilymph", 4: "pbnoise", 5: "pbcells", 6: "robust", 7: "gating"}
+SI_KEY = {1: "route", 2: "pbtissues", 3: "pbperilymph", 4: "pbnoise", 5: "pbbrain", 6: "pbcells", 7: "robust",
+          8: "gating"}                                           # D152: NI Supplementary Fig. 5 added
 MAIN_FULL = {1: "atlas", 2: "clocksfull", 3: "heatfull", 5: "marrowfull", 7: "noisefull"}
 MAIN_WHOLE = {4: ("main", 2), 6: ("main", 4)}          # NI Figs 4 and 6 have no full copy (Science Figs 2 and 4)
 # NI main-figure panel -> (kind, id, panel): 'main' = Science main figure number, 'sm' = Supplementary key
@@ -80,9 +81,10 @@ SF_FILES = {
     "pbtissues": ("sfig_parabiosis_tissues_v1.pdf", "legends_si.tex", "Supplementary Fig.~2"),
     "pbperilymph": ("sfig_parabiosis_perilymph_v1.pdf", "legends_si.tex", "Supplementary Fig.~3"),
     "pbnoise": ("sfig_parabiosis_noise_v1.pdf", "legends_si.tex", "Supplementary Fig.~4"),
-    "pbcells": ("sfig_parabiosis_cell_types_v2.pdf", "legends_si.tex", "Supplementary Fig.~5"),
-    "robust": ("sfig_robustness_v2.pdf", "legends_si.tex", "Supplementary Fig.~6"),
-    "gating": ("sfig1_flow_gating_v2.pdf", "legends_si.tex", "Supplementary Fig.~7")}
+    "pbbrain": ("sfig_brain_format_v1.pdf", "legends_si.tex", "Supplementary Fig.~5"),
+    "pbcells": ("sfig_parabiosis_cell_types_v2.pdf", "legends_si.tex", "Supplementary Fig.~6"),
+    "robust": ("sfig_robustness_v2.pdf", "legends_si.tex", "Supplementary Fig.~7"),
+    "gating": ("sfig1_flow_gating_v2.pdf", "legends_si.tex", "Supplementary Fig.~8")}
 # full copies of NI main figures: which of their panels the Science main figures show
 FULL_NOTE = {"atlas": "Panels A, B and D are shown in Fig.~1, A to C.",
              "clocksfull": "Panels B and D are shown in Fig.~5, A and B.",

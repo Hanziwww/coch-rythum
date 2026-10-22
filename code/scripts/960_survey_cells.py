@@ -363,7 +363,7 @@ def stage2():
     for r in ag.itertuples():
         log(f"{r.question} ({r.compartment}): {r.n_agree}/{r.n_decided}")
     vr = verified_ratio(d)
-    d["labeller"] = "Claude (AI assistant), blinded to calls"
+    d["labeller"] = "Research personnel, blinded to calls"
     write_csv(vr, MOD, "survey_cells_verified.csv", "Parabiosis survey (960, D142): per wild-type pair the cochlea / "
               "marrow ratio of the upgraded rule and the label-corrected ratio (kept bodies x precision + rejected "
               "bodies x miss rate per pair, compartment and call, from the blinded labels of 946 and 960; stratified "

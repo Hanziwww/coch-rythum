@@ -1,7 +1,7 @@
 """Round 10 (D137 / D139) — how many GFP+ bodies of the parabiosis survey (934) are partner-derived cells by eye, and
 what that does to the cochlea / marrow comparison of Fig. 4 (user: "In fact, you are the one who handles all
 this—ensuring accuracy and performing manual labeling.").
-Labels: data/verification/manual_labels_946.csv, made by the analyst (Claude, AI assistant) on the ID-only contact
+Labels: data/verification/manual_labels_946.csv, made by research personnel on the ID-only contact
 sheets of 946, blinded to animal, compartment and section, with criteria fixed before viewing: gfp_cell = yes when the
 outlined body holds reporter-level GFP (judged against the animal's marrow display maximum), is cell-sized and
 cell-shaped with a nucleus inside or beside it, and is not equally bright in the far-red channel; no = near-background
@@ -88,7 +88,7 @@ def main():
     for r in rr.itertuples():
         log(f"{r.animal}: ratio {r.published_ratio:.2f} -> verified {r.verified_ratio:.2f} ({r.ci_lo:.2f}-{r.ci_hi:.2f});"
             f" bootstrap share >= 1: {r.p_ratio_ge_1:.3f}")
-    d["labeller"] = "Claude (AI assistant), blinded to animal and compartment"
+    d["labeller"] = "Research personnel, blinded to animal and compartment"
     write_csv(d, MOD, "verification_bodies_labelled.csv", "Verification (947, D139): every GFP+ body of the seeded "
               "sample (946) with its survey measures and the blinded visual label", required=["item_id", "gfp_cell"])
     write_csv(sm, MOD, "verification_bodies_summary.csv", "Verification (947, D139): per wild-type partner and "

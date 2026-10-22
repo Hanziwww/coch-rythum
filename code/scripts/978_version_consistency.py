@@ -16,7 +16,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from lib.io import ROOT, log, write_csv  # noqa: E402
 
-NI, SCI = ROOT / "manuscript" / "ni", ROOT / "manuscript" / "science"
+NI, SCI = ROOT / "manuscript", ROOT / "manuscript" / "science"
 NI_FILES = ["abstract.tex", "intro.tex", "results.tex", "discussion.tex", "legends_main.tex", "legends_ed.tex",
             "legends_si.tex", "supplementary.tex", "methods.tex"]
 SCI_FILES = ["main.tex", "captions.tex", "sm_text.tex", "sm_captions.tex"]
@@ -61,7 +61,10 @@ def main():
     ni_nums = set(numbers(ni_text))
     rows = []
     for f in SCI_FILES:
-        for n in sorted(set(numbers((SCI / f).read_text(encoding="utf-8")))):
+        candidate = (SCI / f).read_text(encoding="utf-8")
+        if f == "main.tex":
+            candidate = candidate.split("% maintext:end", 1)[0]
+        for n in sorted(set(numbers(candidate))):
             rows.append(dict(kind="number", where=f, item=n, status="found" if n in ni_nums else "missing"))
     sci_text = " ".join("\n".join((SCI / f).read_text(encoding="utf-8") for f in ["main.tex", "captions.tex"]).split())
     ni_main = " ".join("\n".join((NI / f).read_text(encoding="utf-8") for f in ["abstract.tex", "results.tex",

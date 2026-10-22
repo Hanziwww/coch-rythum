@@ -1,4 +1,4 @@
-"""Round 10 (D134; v3 D142) — Fig. 4: an immune channel connects the cochlea to the temporal-bone marrow (180 x 170 mm,
+"""Round 10 (D134; v3 D142; v4 D151) — Fig. 4: an immune channel connects the cochlea to the temporal-bone marrow (180 x 170 mm,
 5-7 pt). Built from the former Fig. 4a-d (912) and Fig. 5a (913) when Fig. 4 was split (user: reorganise the two figures
 to make them more informative); raw images first, then their statistics.
 v3 (D142; user: "I am not satisfied with version v2. Please revert to the previous version, while only incorporating
@@ -7,6 +7,15 @@ with coloured keys, horizontal category labels, the cochlea / marrow ratio in th
 verification counts on the cell-type panel) and the upgraded quantification of the parabiosis panels: partner-derived
 cells counted by the upgraded body rule (960) and immune cells typed on segmented nuclei (961), both checked against
 blinded visual labels.
+v4 (D150-D152; user: "compare the ear, brain, liver, and blood (using external data for the blood)", "add liver and
+brain to Fig. 4g ..., the published blood band to Fig. 4i" and "I would like the number of cochleae to be comparable to
+the number of brains", "the current quantitative criteria for the cochlea are too broad" and "Create a combined bar and
+line chart"): g shows liver, marrow, cochlea and brain with every tissue counted in the brain image's format (966: one
+optical section at a time at 2.773 um per pixel; the brain from its rendered projection, a diamond, an upper bound for a
+section) by the strict rule of 968 (chosen on the blinded labels, applied to every tissue), as bars (mean of the pairs)
+with lines for the pairs; i adds the partner-derived share of blood neutrophils in published parabiosis as a shaded
+band; the bottom row is re-divided (g 72, h 40, i 64 mm). The native counts with their detection and depth checks stay
+in Supplementary Fig. 2.
 
 a  BM-cochlear immune channel (D84): two 3D surface renders with the authors' manual annotation (teal) of vessels from
    the marrow onto the cochlea; right, the same views unannotated (930 exports).
@@ -20,18 +29,19 @@ e  Parabiosis design (D133): wild type joined to a Lyz2-EGFP partner; GFP+ cells
 f  Raw images: 54-day marrow and cochlear lateral wall of the wild-type partner (930 crops of the 931 sections; GFP
    green, FUT4 magenta, DAPI blue; asterisks, FUT4+ cells, all GFP-negative) and perilymph cells of the 28-day
    wild-type and GFP partners (935 crops; GFP green, DAPI blue; circles, cells called GFP+ (yellow) or GFP- (white)).
-g  Partner-derived (GFP+) cells per mm2 of marrow and cochlea per wild-type pair (960, upgraded rule; lines), with the
-   range of the cochlear value's detection-corrected and brightest-section estimates (vertical bar); log axis; key, the
-   cochlea / marrow ratio.
+g  Partner-derived (GFP+) cells per mm2 of liver, marrow, cochlea and brain, every tissue counted in the brain image's
+   format by the strict rule (966, 968): bars, mean of the pairs; lines and points, each pair (diamond, the brain
+   projection); log axis; key, the cochlea / marrow ratio by this count (rule) and corrected with the blinded labels of
+   the native count (verified).
 h  Perilymph GFP+ share of nucleated cells, wild-type vs GFP partner (pooled bars; points, fields).
 i  Partner-derived (GFP+) share of immune cells of the 54-day wild-type partner by cell type and compartment (961,
    nucleus-anchored typing; cochlear neutrophils from the 60x lateral wall, 931; bar, share; line, Clopper-Pearson 95%
    CI; B cells, which lack the reporter, as control); right, GFP+ / typed cells and typed cells confirmed as single
-   marker+ cells in the blinded review.
+   marker+ cells in the blinded review; shaded, blood neutrophils in published parabiosis (external, 22-30%).
 Inputs: results/r9_figures (900 build_f4: image_panels_log, image_spatial_key, f5a_fut4_cells, f4_parabiont_objects,
-f4d_parabiosis_pairs, f4d_perilymph_fields, f4i_celltype_share, sfig_parabiosis_images / _crop_objects) and
+f4d_parabiosis_pairs, f4g_tissue_densities, f4d_perilymph_fields, f4i_celltype_share, f4i_blood_reference, sfig_parabiosis_images / _crop_objects) and
 figures/panels (930, 935). No statistics are computed here.
-Output: figures/figures/fig4_immune_channel_v3.*   Run: COCH_ROOT=/path/to/coch-rythum python scripts/914_fig4_immune_channel.py
+Output: figures/figures/fig4_immune_channel_v4.*   Run: COCH_ROOT=D:/coch-rythum python scripts/914_fig4_immune_channel.py
 """
 import sys
 from pathlib import Path
@@ -52,11 +62,13 @@ ROOT = Path(__file__).resolve().parents[1]
 R9 = ROOT / "results" / "r9_figures"
 OUT = ROOT / "figures" / "figures"
 PANELS = ROOT / "figures" / "panels"
-NAME = "fig4_immune_channel_v3"
+NAME = "fig4_immune_channel_v4"
 GUT = 0.6                                               # gutter between image tiles (mm)
 C_COCH, C_MARROW = fd.TISSUE_COLOUR["cochlea"], fd.TISSUE_COLOUR["bm"]
 C_WT, C_GFP = "#333333", "#2CA02C"
 DAY_COL = {14: "#56B4E9", 31: "#CC79A7", 54: "#000000"}
+C_BLOOD, C_BLOOD_BAND = "#7A0403", "#F2E1E1"                     # i: published blood neutrophils (D150)
+TISSUE_X = {"liver": 0, "marrow": 1, "cochlea": 2, "brain": 3}       # g: tissue order (D150)
 YELLOW = "#FFD700"
 
 
@@ -375,30 +387,41 @@ ROW_TOP, ROW_BOTTOM = 7.5, 7.5                            # g-i: plot areas shar
 
 
 def panel_pairs(cv, x0, y0, w, h):
-    cv.letter(x0, y0, "g", "Marrow vs cochlea, per pair")
+    """g — partner-derived cells per mm2 by tissue, every tissue counted in the brain image's format by the strict rule
+    (966, 968; D152, D153): liver, marrow and cochlea one optical section at a time at 2.773 um per pixel, the brain from
+    its rendered projection (diamond; an upper bound for a section); bars, mean of the pairs (liver and brain, the 31-day
+    partner only); lines join the tissues of one pair; key, the cochlea / marrow ratio by this count (rule) and the
+    label-corrected ratio of the native count (verified; D140, D142)."""
+    cv.letter(x0, y0, "g", "Partner-derived cells by tissue")
     pr = pd.read_csv(R9 / "f4d_parabiosis_pairs.csv").sort_values("days")
+    tg = pd.read_csv(R9 / "f4g_tissue_densities.csv")
     ax = cv.axes(x0 + 12.0, y0 + ROW_TOP, w - 33.0, h - ROW_TOP - ROW_BOTTOM)
-    vals = pr[["marrow_density", "cochlea_density", "cochlea_corrected_density", "cochlea_best_plane_density"]].stack()
+    vals = tg["density_strict_per_mm2"]
     lo_lim = 10.0 ** np.floor(np.log10(vals[vals > 0].min()))
     hi_lim = 10.0 ** np.ceil(np.log10(vals.max()))
-    for r in pr.itertuples():
-        col = DAY_COL[int(r.days)]
-        ax.plot([0, 1], [r.marrow_density, r.cochlea_density], color=col, linewidth=0.8, zorder=2)
-        ax.scatter([0, 1], [r.marrow_density, r.cochlea_density], s=10, c=col, linewidths=0, zorder=3)
-        lo = min(r.cochlea_density, r.cochlea_corrected_density, r.cochlea_best_plane_density)
-        hi = max(r.cochlea_density, r.cochlea_corrected_density, r.cochlea_best_plane_density)
-        dx = {14: -0.06, 31: 0.06, 54: 0.0}[int(r.days)]
-        ax.plot([1.12 + dx, 1.12 + dx], [lo, hi], color=col, linewidth=0.9, zorder=2, solid_capstyle="butt")
-        for v in (lo, hi):                                                # caps, so a short range still reads as one
-            ax.plot([1.12 + dx - 0.025, 1.12 + dx + 0.025], [v, v], color=col, linewidth=0.6, zorder=2)
-    assert vals.between(lo_lim, hi_lim).all(), "g values outside the axis"
-    ax.set_xlim(-0.3, 1.35)
-    ax.set_xticks([0, 1], ["Marrow", "Cochlea"], fontsize=PT_SMALL)
+    bars = tg.groupby("compartment")["tissue_mean_per_mm2"].first()
+    for k, v in bars.items():                                            # bars: mean of the pairs (D153)
+        ax.bar(TISSUE_X[k], v - lo_lim, bottom=lo_lim, width=0.62, color="#E6E6E6", edgecolor=TEXT2, linewidth=0.5,
+               zorder=1)
+    for days, g in tg.groupby("days"):
+        col = DAY_COL[int(days)]
+        dodge = {14: -0.12, 31: 0.0, 54: 0.12}[int(days)]
+        g = g.assign(x=g["compartment"].map(TISSUE_X) + dodge).sort_values("x")
+        ax.plot(g["x"], g["density_strict_per_mm2"], color=col, linewidth=0.8, zorder=2)
+        c_ = g[g["compartment"] != "brain"]
+        ax.scatter(c_["x"], c_["density_strict_per_mm2"], s=10, c=col, linewidths=0, zorder=3)
+        b_ = g[g["compartment"] == "brain"]
+        ax.scatter(b_["x"], b_["density_strict_per_mm2"], s=13, marker="D", c=col, linewidths=0, zorder=3)
+    assert vals.between(lo_lim, hi_lim).all() and bars.between(lo_lim, hi_lim).all(), "g values outside the axis"
+    ax.set_xlim(-0.5, 3.5)
+    ax.set_xticks([TISSUE_X[k] for k in ("liver", "marrow", "cochlea", "brain")],
+                  ["Liver", "Marrow", "Cochlea", "Brain"], fontsize=PT_SMALL)
     ax.tick_params(axis="x", length=1.2, pad=0.8, labelsize=PT_SMALL)
     logaxis(ax, lo_lim, hi_lim)
     clean(ax)
     ax.set_ylabel("GFP+ cells per mm² (log scale)", fontsize=PT_SMALL, labelpad=0.8)
-    # key: pair, and its cochlea / marrow ratio by the rule and corrected with the blinded labels (D140, D142)
+    # key: pair, and its cochlea / marrow ratio by this count (rule) and label-corrected (verified; D140, D142)
+    ratio = tg.groupby("animal")["cochlea_to_marrow"].first()
     kx = x0 + w - 19.4
     c1 = kx + 2.7 + text_width("00 d", PT_SMALL) + 1.0 + text_width("0.00", PT_SMALL)      # right edges of the columns
     c2 = c1 + 1.2 + text_width("verified", PT_SMALL)
@@ -409,14 +432,16 @@ def panel_pairs(cv, x0, y0, w, h):
         ky = y0 + ROW_TOP + 1.0 + 2.6 * i
         cv.line([kx, kx + 2.2], [ky, ky], DAY_COL[int(r.days)], 0.8)
         cv.text(kx + 2.7, ky, f"{int(r.days)} d", size=PT_SMALL, va="center")
-        cv.text(c1, ky, f"{r.cochlea_to_marrow:.2f}", size=PT_SMALL, ha="right", va="center")
+        cv.text(c1, ky, f"{ratio[r.animal]:.2f}", size=PT_SMALL, ha="right", va="center")
         cv.text(c2, ky, f"{r.verified_ratio:.2f}", size=PT_SMALL, ha="right", va="center")
     fits(c2, x0 + w + 0.5, "g key")
-    ky = y0 + ROW_TOP + 1.0 + 2.6 * len(pr) + 1.2
-    cv.line([kx + 1.1, kx + 1.1], [ky - 1.0, ky + 1.0], TEXT, 0.9)
-    cv.text(kx + 2.7, ky, "corrected", size=PT_SMALL, va="center")
-    cv.text(kx + 2.7, ky + 2.4, "range", size=PT_SMALL, va="center")
-    assert ky + 2.4 + 1.0 <= y0 + h - ROW_BOTTOM + 3.0, "g key height"
+    ky = y0 + ROW_TOP + 1.0 + 2.6 * len(pr) + 1.4
+    cv.box(kx + 0.1, ky - 1.0, 2.0, 2.0, "#E6E6E6", TEXT2, 0.5)                # bar: mean of the pairs
+    cv.text(kx + 2.7, ky, "mean", size=PT_SMALL, va="center")
+    cv.mark(kx + 1.1, ky + 2.6, s=11, marker="D", fc=TEXT2)                # brain: rendered projection (D150)
+    cv.text(kx + 2.7, ky + 2.6, "projection", size=PT_SMALL, va="center")
+    fits(kx + 2.7 + text_width("projection", PT_SMALL), x0 + w + 0.5, "g key projection")
+    assert ky + 2.6 + 1.0 <= y0 + h - ROW_BOTTOM + 3.0, "g key height"
 
 
 def panel_perilymph(cv, x0, y0, w, h):
@@ -453,6 +478,8 @@ def panel_celltypes(cv, x0, y0, w, h):
     review."""
     cv.letter(x0, y0, "i", "Partner-derived share, 54 d")
     fc = pd.read_csv(R9 / "f4i_celltype_share.csv")
+    bl = pd.read_csv(R9 / "f4i_blood_reference.csv")                         # published blood neutrophils (D150)
+    b_lo, b_hi = float(bl.partner_derived_pct.min()), float(bl.partner_derived_pct.max())
     rows = list(fc.itertuples())
     lab_w = max(text_width(r.label, PT_SMALL) for r in rows) + 5.0
     cnt_w = text_width("000/000", PT_SMALL) + 1.4
@@ -460,7 +487,11 @@ def panel_celltypes(cv, x0, y0, w, h):
     pw = w - lab_w - cnt_w - ver_w
     ah = h - ROW_TOP - ROW_BOTTOM
     ax = cv.axes(x0 + lab_w, y0 + ROW_TOP, pw, ah)
-    xmax = 30.0
+    xmax = 40.0
+    assert b_hi < xmax
+    ax.axvspan(b_lo, b_hi, color=C_BLOOD_BAND, linewidth=0, zorder=0)
+    cv.text(x0 + lab_w + (b_lo + b_hi) / 2 / xmax * pw, y0 + ROW_TOP - 0.5, "Blood", size=PT_SMALL, ha="center",
+            va="bottom")                                   # black text, colour in the band (D137)
     for k, r in enumerate(rows):
         col = C_COCH if r.compartment == "cochlea" else C_MARROW
         ax.barh(k, r.gfp_pos_pct, height=0.6, color=col, zorder=2)
@@ -482,7 +513,7 @@ def panel_celltypes(cv, x0, y0, w, h):
     n_coch = int((fc.compartment == "cochlea").sum())
     ax.axhline(n_coch - 0.5, color=GRID, linewidth=0.4, zorder=0)
     ax.set_xlim(0, xmax)
-    ax.set_xticks([0, 10, 20, 30])
+    ax.set_xticks([0, 10, 20, 30, 40])
     minor(ax, x=True, y=False)
     ax.tick_params(axis="x", length=1.2, pad=0.8, labelsize=PT_SMALL)
     ax.tick_params(axis="y", length=0)
@@ -502,9 +533,9 @@ def main():
     panel_fluids(cv, 98.0, 0.0, 82.0, 85.0, tile=16.0)
     panel_design(cv, 0.0, 87.5, 40.0, 42.0)
     panel_raw(cv, 42.0, 87.5, 138.0, 42.0)
-    panel_pairs(cv, 0.0, 132.0, 60.0, 38.0)
-    panel_perilymph(cv, 62.0, 132.0, 48.0, 38.0)
-    panel_celltypes(cv, 112.0, 132.0, 68.0, 38.0)
+    panel_pairs(cv, 0.0, 132.0, 72.0, 38.0)
+    panel_perilymph(cv, 74.0, 132.0, 40.0, 38.0)
+    panel_celltypes(cv, 116.0, 132.0, 64.0, 38.0)
     for p in cv.save(OUT, NAME):
         print(f"[fig] {p.relative_to(ROOT)}")
 

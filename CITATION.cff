@@ -1,13 +1,17 @@
 cff-version: 1.2.0
-message: "Please cite the archived release when its reserved DOI is published."
+message: "Please cite the archived release."
 title: "A day-night atlas of the inner ear and its marrow: analysis code"
 type: software
-version: "1.0"
+version: "1.1"
+date-released: 2026-10-22
+doi: 10.5281/zenodo.23555378
 license: Apache-2.0
 repository-code: "https://github.com/Hanziwww/coch-rythum"
 authors:
   - family-names: "Wang"
     given-names: "Han"
+  - family-names: "Yeong"
+    given-names: "Joe"
   - family-names: "Cai"
     given-names: "Yao"
   - family-names: "Mo"
@@ -38,4 +42,4 @@ authors:
     given-names: "Yusu"
   - family-names: "Tian"
     given-names: "Chunjie"
-abstract: "Analysis code for an unpublished study of the day-night single-cell atlas of the mouse cochlea and adjacent temporal-bone marrow. The associated data archive has reserved Zenodo DOI 10.5281/zenodo.23451539 and is currently an unpublished restricted-access draft."
+abstract: "Analysis code for the day-night single-cell atlas of the mouse cochlea and temporal-bone marrow, including the D149-D155 tissue-comparison increment. Associated Zenodo files have restricted access. Han Wang and Joe Yeong contributed equally."

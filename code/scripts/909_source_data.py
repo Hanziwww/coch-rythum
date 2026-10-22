@@ -12,7 +12,7 @@ is written alongside. Each figure is then packed with its image panels (figures/
 <manuscript>/submission/source_data/Source_Data_<Fig>.zip (config paths.manuscript), and the same tables are written
 as one Excel workbook per figure, Source_Data_<Fig>.xlsx (D134: an 'index' sheet mapping panels to sheets, then one
 sheet per panel table whose first row names the figure, panel and table).
-Run (local; figures/panels are local): COCH_ROOT=/path/to/coch-rythum python scripts/909_source_data.py
+Run (local; figures/panels are local): COCH_ROOT=D:/coch-rythum python scripts/909_source_data.py
 """
 import glob
 import sys
@@ -29,8 +29,9 @@ R9 = RESULTS / "r9_figures"
 OUT_ZIP = MANUSCRIPT / "submission" / "source_data"
 FLOW = {"flow_plots.csv", "flow_contours.csv", "flow_outliers.csv", "flow_gates.csv"}
 # D143: panel-index IDs of the Supplementary Figures -> published number (1 vessel-trace check, 2-4 parabiosis survey,
-# 5 cell types, 6 robustness and verification, 7 flow gating); SIMG2 (fluid images, sfig_fluids_v1) was retired
-SI_NUMBER = {"SIMG1": 1, "S1": 2, "S2": 3, "S3": 4, "S4": 5, "SROB": 6, "S5": 7}
+# 5 brain and the brain-image format (STC, D152), 6 cell types, 7 robustness and verification, 8 flow gating); SIMG2
+# (fluid images, sfig_fluids_v1) was retired
+SI_NUMBER = {"SIMG1": 1, "S1": 2, "S2": 3, "S3": 4, "STC": 5, "S4": 6, "SROB": 7, "S5": 8}
 SI_RETIRED = {"SIMG2"}
 
 

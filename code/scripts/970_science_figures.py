@@ -5,14 +5,14 @@ figures/science/ under the names below). 180 mm wide, 5-7 pt, as the source pane
 
 Fig. 1 sci_fig1_compartment_v1   A study design (910 a), B joint atlas (910 b), C immune subtypes (910 d),
                                  D hematopoietic cells per sample (920 f), E neutrophils in the cochlear fluids (914 d)
-Fig. 2 sci_fig2_local_supply_v1  A-C marrow-cochlea route, neutrophils at the cochlea, neutrophil states (914 a-c),
+Fig. 2 sci_fig2_local_supply_v2  A-C marrow-cochlea route, neutrophils at the cochlea, neutrophil states (914 a-c),
                                  D check of the hand tracing (941 data, drawn here), E-I parabiosis (914 e-i)
 Fig. 3 sci_fig3_daily_rhythms_v1 A day-night timetable, B timed shares, C independent flow cohort (912 a-c)
 Fig. 4 sci_fig4_release_time_v1  A-H the neutrophil split (913, all panels, layout of the Nature Immunology Fig. 6)
 Fig. 5 sci_fig5_tissue_time_v1   A clock offsets and B single-cell clock tracking (Nature Immunology Fig. 2b and 2d data,
                                  drawn here), C heat-shock genes (911 b), D mouse night = baboon day (911 f), E-F the
                                  independent noise cohort (916 e, f)
-Run: COCH_ROOT=/path/to/coch-rythum COCH_FIG_STYLE=science python scripts/970_science_figures.py [1 2 3 4 5]
+Run: COCH_ROOT=D:/coch-rythum COCH_FIG_STYLE=science python scripts/970_science_figures.py [1 2 3 4 5]
 """
 import importlib.util
 import os
@@ -125,12 +125,12 @@ def sci_fig2():
     cv.relabel = ["F"]
     m914.panel_raw(cv, 42.0, 87.5, 138.0, 42.0)
     cv.relabel = ["G"]
-    m914.panel_pairs(cv, 0.0, 132.0, 60.0, 38.0)
+    m914.panel_pairs(cv, 0.0, 132.0, 72.0, 38.0)                  # D151: liver and brain added (914 v4)
     cv.relabel = ["H"]
-    m914.panel_perilymph(cv, 62.0, 132.0, 48.0, 38.0)
+    m914.panel_perilymph(cv, 74.0, 132.0, 40.0, 38.0)
     cv.relabel = ["I"]
-    m914.panel_celltypes(cv, 112.0, 132.0, 68.0, 38.0)
-    save(cv, "sci_fig2_local_supply_v1")
+    m914.panel_celltypes(cv, 116.0, 132.0, 64.0, 38.0)            # D151: published blood band
+    save(cv, "sci_fig2_local_supply_v2")
 
 
 # ------------------------------------------------------------------------------------------------ Fig. 3

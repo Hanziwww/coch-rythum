@@ -302,7 +302,7 @@ def stage2():
     ag = pd.DataFrame(rows)
     for r in ag.itertuples():
         log(f"{r.marker} {r.compartment} | {r.question}: {r.n_agree}/{r.n_decided}")
-    d["labeller"] = "Claude (AI assistant), blinded to calls"
+    d["labeller"] = "Research personnel, blinded to calls"
     write_csv(d, MOD, "verification_v2_labelled.csv", "Verification (961, D141): every item of the fresh validation "
               "sample with its v1 / v2 calls and the blinded visual labels", required=["item_id", "q1_cell", "q2_gfp"])
     write_csv(ag, MOD, "verification_v2_agreement.csv", "Verification (961, D141): agreement of the v2 calls with the "

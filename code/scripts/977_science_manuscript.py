@@ -103,7 +103,7 @@ def write_numbers(order, smrefs="see the Supplementary Materials"):
 def env():
     e = os.environ.copy()
     e["PATH"] = os.pathsep.join(x for x in e["PATH"].split(os.pathsep) if "tensorflow_jni" not in x)
-    e["BIBINPUTS"] = os.pathsep.join([str(SCI), str(ROOT / "manuscript" / "ni"), ""])
+    e["BIBINPUTS"] = os.pathsep.join([str(SCI), str(ROOT / "manuscript"), ""])
     e["BSTINPUTS"] = os.pathsep.join([str(SCI), ""])
     e["TEXINPUTS"] = os.pathsep.join([str(SCI), ""])
     return e
@@ -115,7 +115,7 @@ def run(cmd):
 
 
 def pdflatex(doc):
-    return run(["pdflatex", "-interaction=nonstopmode", "-output-directory=build", f"{doc}.tex"])
+    return run(["pdflatex", "-no-shell-escape", "-interaction=nonstopmode", "-output-directory=build", f"{doc}.tex"])
 
 
 def bibtex(doc):

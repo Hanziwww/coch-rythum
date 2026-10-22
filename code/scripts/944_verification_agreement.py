@@ -1,6 +1,6 @@
 """Round 10 (D137 / D139) — agreement of the image calls with blinded visual labels of the verification sample (943;
 user: "In fact, you are the one who handles all this—ensuring accuracy and performing manual labeling.").
-Labels: data/verification/manual_labels_943.csv, made by the analyst (Claude, AI assistant) on ID-stamped contact sheets
+Labels: data/verification/manual_labels_943.csv, made by research personnel on ID-stamped contact sheets
 built from figures/gallery/gallery_data.js only (no call, compartment, field or stratum visible), with criteria fixed
 before viewing:
   q1_cell  yes = the outline holds marker signal above the local background, corresponds to one cell-sized object (or
@@ -121,7 +121,7 @@ def main():
         log(f"{r.stratum} | {r.question}: {r.n_agree}/{r.n_decided} = {r.share:.0%} ({r.ci_lo:.0%}-{r.ci_hi:.0%}); "
             f"unsure {r.n_unsure}")
     log(cl.to_string())
-    d["labeller"] = "Claude (AI assistant), blinded to calls"
+    d["labeller"] = "Research personnel, blinded to calls"
     write_csv(d, MOD, "verification_items_labelled.csv", "Verification (944, D139): every item of the seeded sample "
               "(943) with its algorithm calls and the blinded visual labels (cell, GFP, tissue; note)",
               required=["item_id", "stratum", "q1_cell", "q2_gfp", "tissue"])

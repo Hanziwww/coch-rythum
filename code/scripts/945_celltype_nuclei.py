@@ -295,7 +295,7 @@ def stage2():
     ag = pd.DataFrame(rows)
     for r in ag.itertuples():
         log(f"{r.marker} {r.compartment} | {r.question}: {r.n_agree}/{r.n_decided} ({r.share:.0%})")
-    d["labeller"] = "Claude (AI assistant), blinded to calls"
+    d["labeller"] = "Research personnel, blinded to calls"
     write_csv(d, MOD, "verification_nuclei_labelled.csv", "Verification (945, D141): every item of the seeded sample "
               "with its calls and the blinded visual labels", required=["item_id", "q1_cell", "q2_gfp"])
     write_csv(ag, MOD, "verification_nuclei_agreement.csv", "Verification (945, D141): agreement of the nucleus-"
